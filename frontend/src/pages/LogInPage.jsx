@@ -96,7 +96,7 @@ function LogInPage() {
 
             <div>
               <span>
-                <Link to="/user/forgotpassword" className="text-xs mt-1 text-indigo-500 hover:underline">Forgot Your Password?</Link>
+                <Link to="/user/forgotpassword" className="text-xs mt-1 text-indigo-500 hover:underline">Forgot Password?</Link>
               </span>
             </div>
 

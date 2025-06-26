@@ -97,8 +97,17 @@ function Header() {
                         </svg>
                     </label>
                     <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 border border-base-200">
-                        <li><a href="#learnDSA">Learn DSA</a></li>
-                        <li><a to="#battle">Code Battle</a></li>
+                         <li><a href="#learnDSA" onClick={()=>navigate("/?pageId=learnDSA")}>
+                            Learn DSA
+                        </a></li>
+                        <li><a 
+                    href="#battle" 
+                    onClick={()=>navigate("/?pageId=battle")}
+                >
+                    <span className="relative">
+                        Code Battle
+                       </span>
+                </a></li>
                         <li><Link to="/battle/weeklyleaderboard" >Weekly LeaderBoard</Link></li>
                         {isAuthenticated && user?.role === 'admin' && (
                             <li><NavLink to="/admin">Admin Dashboard</NavLink></li>
