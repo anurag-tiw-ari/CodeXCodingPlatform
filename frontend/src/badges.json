@@ -1,0 +1,73 @@
+[
+  {
+    "name": "Rookie",
+    "emoji": "🔰",
+    "description": "A newcomer starting their coding journey, eager to learn and grow.",
+    "battlesWonStart": 0,
+    "battlesWonEnd": 9
+  },
+  {
+    "name": "Contender",
+    "emoji": "⚔️",
+    "description": "A determined coder rising to the challenge and gaining experience.",
+    "battlesWonStart": 10,
+    "battlesWonEnd": 24
+  },
+  {
+    "name": "Pioneer",
+    "emoji": "🧭",
+    "description": "An explorer making bold moves and setting new coding trails.",
+    "battlesWonStart": 25,
+    "battlesWonEnd": 49
+  },
+  {
+    "name": "SemiPro",
+    "emoji": "🏹",
+    "description": "A skilled developer hitting closer to the mark with precision.",
+    "battlesWonStart": 50,
+    "battlesWonEnd": 99
+  },
+  {
+    "name": "Pro",
+    "emoji": "🥇",
+    "description": "A seasoned developer achieving victories and milestones.",
+    "battlesWonStart": 100,
+    "battlesWonEnd": 199
+  },
+  {
+    "name": "Ace",
+    "emoji": "♠️",
+    "description": "A sharp and talented coder making their mark with precision.",
+    "battlesWonStart": 200,
+    "battlesWonEnd": 349
+  },
+  {
+    "name": "Master",
+    "emoji": "👑",
+    "description": "A highly skilled and respected developer at the top of their craft.",
+    "battlesWonStart": 350,
+    "battlesWonEnd": 549
+  },
+  {
+    "name": "Titan",
+    "emoji": "🗿",
+    "description": "A strong and resilient force in the coding arena.",
+    "battlesWonStart": 550,
+    "battlesWonEnd": 799
+  },
+  {
+    "name": "Ascendant",
+    "emoji": "🚀",
+    "description": "A rising star reaching new heights and breaking boundaries.",
+    "battlesWonStart": 800,
+    "battlesWonEnd": 1099
+  },
+  {
+    "name": "Immortal",
+    "emoji": "♾️",
+    "description": "A legendary developer with an everlasting legacy.",
+    "battlesWonStart": 1100,
+    "battlesWonEnd": 9999
+  }
+]
+

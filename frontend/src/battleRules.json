@@ -1,0 +1,62 @@
+[
+  {
+    "title": "Initiation",
+    "content": "User chooses difficulty + topics",
+    "icon": "⚙️"
+  },
+  {
+    "title": "Entry Fee",
+    "content": "Coins deducted at match start",
+    "icon": "💰"
+  },
+  {
+    "title": "Matchmaking",
+    "content": "Opponent found with same difficulty + matching topic(s)",
+    "icon": "🔍"
+  },
+  {
+    "title": "Wait Limit",
+    "content": "If no match in 30 seconds, user is refunded entry fee",
+    "icon": "⏱️"
+  },
+  {
+    "title": "First Accepted Submission",
+    "content": "Declared Winner",
+    "icon": "🏆"
+  },
+  {
+    "title": "Winner Reward",
+    "content": "2x coins, battlesWon++, stats updated",
+    "icon": "🎉"
+  },
+  {
+    "title": "Loser",
+    "content": "numberOfBattles++ only, no coins",
+    "icon": "😢"
+  },
+  {
+    "title": "Early Exit",
+    "content": "Disqualified, counts as loss. Opponent wins",
+    "icon": "🚪"
+  },
+   {
+    "title": "Tab Switch",
+    "content": "Disqualified, counts as loss. Opponent wins",
+    "icon": "💻"
+  },
+  {
+    "title": "Results Sent",
+    "content": "battleEnd event with winner ID, test results, stats",
+    "icon": "📨"
+  },
+  {
+    "title": "Streaks & Score",
+    "content": "Updated for winners (and accepted solves)",
+    "icon": "📈"
+  },
+  {
+    "title": "Refund Cases",
+    "content": "No match found or unexpected error → Entry fee refunded",
+    "icon": "↩️"
+  }
+]

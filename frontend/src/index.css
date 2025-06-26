@@ -1,0 +1,39 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+/* .navbar{
+    animation-name: topDown;
+    animation-duration: 1s;
+}
+
+@keyframes topDown {
+   0% {
+         top: -20px;
+   }
+   100%
+   {
+     top:0px
+   }
+} */
+
+html{
+  scroll-behavior: smooth;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+.streaming-cursor {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
