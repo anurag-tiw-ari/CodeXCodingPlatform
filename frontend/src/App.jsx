@@ -51,7 +51,7 @@ function App()
     useEffect(() => {
     if (isAuthenticated) {
       
-      const socket = io("http://localhost:3000", {
+      const socket = io("https://codexcodingplatform.onrender.com", {
         query: {
           userId: user._id
         }
