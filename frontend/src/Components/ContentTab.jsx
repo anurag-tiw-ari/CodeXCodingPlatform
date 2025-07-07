@@ -20,8 +20,12 @@ function ContentTab ()
         </div>
 
         <div className="create" style={{display:`${selected==='write'? "block":"none"}`}}><ContentCreate /></div>
-        <div className="update" style={{display:`${selected==='update'? "block":"none"}`}}><ContentUpdate /></div>
-        <div className="delete" style={{display:`${selected==='delete'? "block":"none"}`}}><ContentDelete /></div>
+        {
+            selected==="update" && <ContentUpdate />
+        }
+        {
+            selected==="delete" && <ContentDelete />
+        }
 
         </>
      )

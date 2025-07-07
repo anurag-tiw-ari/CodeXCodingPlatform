@@ -1,0 +1,64 @@
+
+.editor h1{
+  
+   font-size: 45px;
+   /* font-weight: 600; */
+   margin-bottom: 15px;
+}
+
+.editor h2{
+   font-size: 30px;
+   /* font-weight: 400; */
+   margin-top: 10px;
+   margin-bottom: 10px;
+}
+
+.editor h3{
+   font-size: 22px;
+   /* font-weight: 400; */
+   margin-top: 10px;
+   margin-bottom: 10px;
+}
+
+.editor h4{
+   font-size: 20px;
+   /* font-weight: 400; */
+   margin-top: 10px;
+   margin-bottom: 10px;
+}
+
+.editor h5{
+   font-size: 17px;
+   /* font-weight: 400; */
+   margin-top: 10px;
+   margin-bottom: 10px;
+}
+
+.editor h6{
+   font-size: 15px;
+   /* font-weight: 400; */
+   margin-top: 10px;
+   margin-bottom: 10px;
+}
+
+.editor p{
+  margin-top: 18px;
+  margin-bottom: 18px;
+}
+
+.editor pre {
+  background-color: #8a2be2;
+  color: #f8f8f2;
+  margin: 15px 0;
+  padding: 15px;
+  border: 2px solid #9c27b0;
+  border-radius: 15px;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  tab-size: 4;
+  /* white-space: pre-wrap;
+  word-wrap: break-word; */
+}

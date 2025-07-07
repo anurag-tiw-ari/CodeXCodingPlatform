@@ -82,7 +82,7 @@ export default function StatsTab({ problems, createdProblems }) {
                             </svg>
                         </div>
                         <div className="stat-title">Hard Problems</div>
-                        <div className="stat-value text-accent">{hardProblems?.length}</div>
+                        <div className="stat-value text-accent">{createdHardProblems?.length}</div>
                         <div className="stat-desc">Created By You</div>
                     </div>
                 </div>

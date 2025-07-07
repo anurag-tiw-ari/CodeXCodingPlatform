@@ -17,6 +17,8 @@ function ContentDelete()
         try{
               const response = await axiosClient.delete(`/content/delete/${selectedContent._id}`)
               setMessage(response?.data)
+              const resp = await axiosClient.get("/content/allcontent");
+              setTotalContent(resp.data)
         }
         catch(err)
         {

@@ -3,6 +3,7 @@ import { useParams, Link, useSearchParams, useLocation } from "react-router";
 import axiosClient from "../utils/axiosClient";
 import { FaRegComment } from "react-icons/fa6";
 import CommentsSection from "../Components/ContentComment";
+import "../editor.css"
 
 function ArticlePage() {
     const { id } = useParams();
