@@ -92,7 +92,7 @@ function ArticlePage() {
 
                 <div className="bg-base-200 rounded-box p-8 shadow-lg">
                     <article 
-                        className="prose lg:prose-xl max-w-none"
+                        className="prose lg:prose-xl max-w-none editor"
                         dangerouslySetInnerHTML={{ __html: article.content }}
                     ></article>
                 </div>
