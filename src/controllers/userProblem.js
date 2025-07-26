@@ -437,7 +437,9 @@ const getPOTD = async (req,res) => {
 
     try 
     {
+        console.log(todayDate);
         const problem = await Problem.findOne({ potdDate: todayDate });
+        console.log(problem)
 
         if (!problem) 
         {
