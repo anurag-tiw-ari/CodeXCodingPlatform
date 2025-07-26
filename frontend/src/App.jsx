@@ -25,6 +25,8 @@ import EditProfile from "./pages/EditProfile.jsx";
 import WeeklyLeaderboard from "./pages/weeklyLeaderboard.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import WatchAd from "./pages/Ads.jsx";
+import SubscriptionPlans from "./pages/Premium.jsx";
+import ThemeToggle from "./pages/Theme.jsx";
 
 function App()
 {
@@ -51,7 +53,7 @@ function App()
     useEffect(() => {
     if (isAuthenticated) {
       
-      const socket = io("https://codexcodingplatform.onrender.com", {
+      const socket = io("https://codexcodingplatform.onrender.com", {  //https://codexcodingplatform.onrender.com
         query: {
           userId: user._id
         }
@@ -104,6 +106,8 @@ function App()
         <Route path="/battle/weeklyleaderboard" element={<WeeklyLeaderboard />}></Route>
         <Route path="/user/forgotpassword" element={<ForgotPassword />}></Route>
         <Route path="/watch/ads" element={<WatchAd />}></Route>
+        <Route path="/upgrade" element={<SubscriptionPlans />}></Route>
+        <Route path="/themes" element={<ThemeToggle />}></Route>
       </Routes>
 
     </>

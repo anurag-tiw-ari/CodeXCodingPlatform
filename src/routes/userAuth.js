@@ -4,6 +4,7 @@ import userMidddleware from "../middleware/userMiddleware.js";
 import adminMiddleware from "../middleware/adminMiddleware.js";
 import { generateProfileUploadSignature,editProfile } from "../controllers/userEdit.js";
 import { otpGenerate, otpGenerateForgetPass, verifyOTP, verifyOTPFP } from "../controllers/verificationOTP.js";
+import User from "../models/user.js";
 
 
 const authRouter=express.Router();
@@ -97,5 +98,39 @@ authRouter.put('/editprofile',userMidddleware,editProfile)
 authRouter.post('/forgotpass/newpass',newPassword)
 
 authRouter.post('/forgotpass/verifyOTP',verifyOTPFP)
+
+authRouter.get('/premium',userMidddleware,async (req,res)=>{
+
+    try{
+     const userId=req.result._id;
+
+     
+     const user = await User.findById(userId).select("premium")
+
+     res.send(user);
+     
+    }
+    catch(err)
+    {
+        res.status(500).send("something went wrong")
+    }
+})
+
+authRouter.get('/another/premium/:id',userMidddleware,async (req,res)=>{
+
+    try{
+     const userId=req.params.id;
+
+     
+     const user = await User.findById(userId).select("premium")
+
+     res.send(user);
+     
+    }
+    catch(err)
+    {
+        res.status(500).send("something went wrong")
+    }
+})
 
 export default authRouter

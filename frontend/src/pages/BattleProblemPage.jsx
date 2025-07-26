@@ -123,9 +123,7 @@ const ProblemPage = () => {
       return;
     }
 
-    // Set initial code based on default language
-
-    // Socket event listeners
+    
     const onOpponentLeft = () => {
       setOpponentDisconnected(true);
       toast.success('Opponent disconnected! You win by default.');
@@ -335,7 +333,7 @@ const handleLike = async () =>{
 
   return (
     <div className="flex flex-col h-screen bg-base-100 text-base-content overflow-hidden fixed z-25 inset-0">
-      {/* Mobile Header */}
+  
       {isMobileView && (
         <div className="flex items-center justify-between p-3 border-b border-base-300 bg-base-200">
           <div className="flex items-center space-x-2">
@@ -361,25 +359,19 @@ const handleLike = async () =>{
         </div>
       )}
 
-      {/* Desktop Layout */}
+      
       {!isMobileView ? (
         <PanelGroup direction="horizontal" className="flex-1">
-          {/* Left Panel - Problem Description */}
+         
           <Panel defaultSize={40} minSize={20} collapsible={true}>
             <div className="h-full flex flex-col bg-base-200 border-r border-base-300">
-              {/* Tab Navigation */}
+             
               <div className="tabs tabs-boxed bg-base-200 px-2 pt-2">
                 <button
                   className={`tab ${activeTab === 'problem' ? 'tab-active' : ''}`}
                   onClick={() => setActiveTab('problem')}
                 >
                   Description
-                </button>
-                <button
-                  className={`tab ${activeTab === 'editorial' ? 'tab-active' : ''}`}
-                  onClick={() => setActiveTab('editorial')}
-                >
-                  Editorial
                 </button>
                  <button
                   className={`tab ${activeTab === 'BattleChat' ? 'tab-active' : ''}`}
@@ -388,8 +380,7 @@ const handleLike = async () =>{
                    ChatWithOpponnet
                 </button> 
               </div>
-              
-              {/* Tab Content */}
+    
               <div className="flex-1 overflow-auto p-4">
                 {activeTab === 'problem' && (
                   <div>
@@ -435,12 +426,6 @@ const handleLike = async () =>{
                   </div>
                 )}
                 
-                {activeTab === 'editorial' && (
-                  <div className="prose prose-invert max-w-none">
-                    <h2 className="text-xl font-bold mb-4">Approach</h2>
-                    <p>Editorial content will go here...</p>
-                  </div>
-                )}
 
                   <div  style={{ display: activeTab === 'BattleChat' ? 'block' : 'none' }}>
                     <BattleChat battleId={battleId}/>
@@ -452,10 +437,10 @@ const handleLike = async () =>{
           
           <PanelResizeHandle className="w-1 bg-base-300 hover:bg-primary transition-colors" />
           
-          {/* Right Panel - Editor and Console */}
+     
           <Panel defaultSize={60} minSize={30}>
             <PanelGroup direction="vertical">
-              {/* Enhanced Editor Header */}
+       
               <div className="flex items-center justify-between p-2 bg-base-200 border-b border-base-300 ">
                 <div className="flex items-center space-x-3">
                   <FaCode className="text-primary" />
@@ -627,13 +612,7 @@ const handleLike = async () =>{
         <FaFileAlt className="mr-1" />
         <span className="text-xs">Problem</span>
       </button>
-      <button
-        className={`tab flex-1 ${activeTab === 'editorial' ? 'tab-active' : ''}`}
-        onClick={() => setActiveTab('editorial')}
-      >
-        <FaBook className="mr-1" />
-        <span className="text-xs">Editorial</span>
-      </button>
+      
       <button
         className={`tab flex-1 ${activeTab === 'BattleChat' ? 'tab-active' : ''}`}
         onClick={() => setActiveTab('BattleChat')}
@@ -689,36 +668,6 @@ const handleLike = async () =>{
         </div>
       )}
       
-      {activeTab === 'editorial' && (
-        <div className="prose prose-sm max-w-none">
-          <h2 className="text-lg font-bold mb-3">Approach</h2>
-          <p>Editorial content will go here...</p>
-        </div>
-      )}
-      
-      {activeTab === 'solutions' && (
-        <div>
-          <h2 className="text-lg font-bold mb-3">Reference Solutions</h2>
-          <div className="space-y-3">
-            {problem.referenceSolution.map((solution, index) => (
-              <div key={index} className="collapse collapse-arrow bg-base-300">
-                <input type="checkbox" />
-                <div className="collapse-title text-sm font-medium">
-                  {solution.language} Solution
-                </div>
-                <div className="collapse-content relative">
-                  <pre className="text-xs font-mono whitespace-pre-wrap overflow-x-auto bg-base-100 p-2 rounded">
-                    {solution.completeCode}
-                  </pre>
-
-                  <div className='absolute bottom-5 right-5 '><FiCopy onClick={()=>{copyToClipboard(solution.completeCode)}} /></div>
-                </div>
-        
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
      
         <div className="h-full flex flex-col" style={{ display: activeTab === 'BattleChat' ? 'block' : 'none' }}>

@@ -194,43 +194,45 @@ const deleteProblem = async (req,res)=>{
     }
 }
 
-const getProblemById = async (req,res)=>{
-    const {id}=req.params
+const getProblemById = async (req, res) => {
+    const { id } = req.params;
 
-    try{
+    try {
+        if (!id)
+            return res.status(400).send("Id is Missing");
 
-        if(!id)
-            throw new Error("Id is Missing")
+        const problem = await Problem.findById(id);
+        if (!problem)
+            return res.status(404).send("Problem is Missing");
 
-        const problem= await Problem.findById(id)
+        const foundProblem = await Problem.findById(id)
+            .select('_id title description difficulty tags visibleTestCases startCode referenceSolution');
 
-        if(!problem)
-            throw new Error("Problem is Missing")
+        if (!foundProblem)
+            return res.status(404).send("Problem is missing");
 
-        const foundProblem = await Problem.findById(id).select('_id title description difficulty tags visibleTestCases startCode referenceSolution');
-      
+        const videos = await SolutionVideo.findOne({ problemId: id });
 
-       if(!foundProblem)
-        throw new Error("Problem is missing")
+      //  console.log("videos:", videos);
 
-       const videos = await SolutionVideo.findOne({problemId:id});
-       
-          if(videos){    
-          foundProblem.secureUrl = videos.secureUrl;
-          foundProblem.cloudinaryPublicId = videos.cloudinaryPublicId;
-          foundProblem.thumbnailUrl = videos.thumbnailUrl;
-          foundProblem.duration = videos.duration;
-       
-          return res.status(200).send(foundProblem);
-          }
+        if (videos) {
+            let videoProblem = foundProblem.toObject();
+            videoProblem.secureUrl = videos.secureUrl;
+            videoProblem.cloudinaryPublicId = videos.cloudinaryPublicId;
+            videoProblem.thumbnailUrl = videos.thumbnailUrl;
+            videoProblem.duration = videos.duration;
 
-        res.status(200).send(foundProblem)
+            return res.status(200).send(videoProblem);
+        }
+
+        return res.status(200).send(foundProblem);
     }
-    catch(err)
-    {
-       res.status(400).send("Error:"+err.message)
+    catch (err) {
+        console.error(err);
+        return res.status(500).send("Error: " + err.message);
     }
 }
+
 
 const getAllProblems = async (req,res)=>{
   
@@ -286,7 +288,7 @@ const submittedProblem = async (req,res)=>{
 
         if(ans.length==0)
         {
-            res.status(200).send("No Submissions")
+            return res.status(200).send("No Submissions")
         }
 
         res.status(200).send(ans)
@@ -451,4 +453,23 @@ const getPOTD = async (req,res) => {
 
 }
 
-export {createProblem,updateProblem,deleteProblem,getProblemById,getAllProblems,solvedProblemsByUser,submittedProblem,likedProblems,checkLike,getLikedProblemsByUser,problemsCreatedByAdmin,solvedProblemsByAnotherUser,getPOTD}
+const searchProblem = async(req,res)=>{
+
+    try{
+     const {keyword}=req.query;
+
+     const problems = await Problem.find({
+     title: { $regex: keyword, $options: 'i' }
+     })
+
+     res.status(200).send(problems)
+    }
+     catch(err)
+
+        {
+             res.status(500).send("Error:Internal Server Error");
+        }
+
+
+}
+export {createProblem,updateProblem,deleteProblem,getProblemById,getAllProblems,solvedProblemsByUser,submittedProblem,likedProblems,checkLike,getLikedProblemsByUser,problemsCreatedByAdmin,solvedProblemsByAnotherUser,getPOTD,searchProblem}

@@ -13,23 +13,20 @@ import { useLocation } from "react-router";
 function HomePage() {
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
-  const {isAuthenticated} = useSelector((state)=>state.auth)
+  const [isPremium, setIsPremium] = useState(false);
+  const [loadingPremium, setLoadingPremium] = useState(true);
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
-  const location = useLocation()
-  const queryParams = new URLSearchParams(location.search)
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const pageId = queryParams.get('pageId');
 
-  const pageId = queryParams.get('pageId')
-
-  useEffect(()=>{
-
-       const element = document.getElementById(pageId)
-
-       if(element)
-       {
-          element.scrollIntoView({behavior:"smooth"})
-       }
-
-  },[pageId])
+  useEffect(() => {
+    const element = document.getElementById(pageId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [pageId]);
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -37,21 +34,36 @@ function HomePage() {
         const response = await axiosClient.get('/contentcomment/getNotification');
         setNotifications(response.data);
       } catch (err) {
-        if(isAuthenticated)
-        toast.error(err.response?.data || "Failed to fetch notifications");
+        if (isAuthenticated)
+          toast.error(err.response?.data || "Failed to fetch notifications");
       }
     };
-    fetchNotifications();
-  }, []); 
 
-  const handleNotificationClick = async (notificationId, contentId, topic, title,commentId) => {
+    const checkPremiumStatus = async () => {
+      try {
+        if (isAuthenticated) {
+          const premRes = await axiosClient.get("/user/premium");
+          setIsPremium(premRes.data.premium);
+        }
+      } catch (err) {
+        toast.error(err.response?.data || "Failed to check premium status");
+      } finally {
+        setLoadingPremium(false);
+      }
+    };
+
+    fetchNotifications();
+    checkPremiumStatus();
+  }, [isAuthenticated]);
+
+  const handleNotificationClick = async (notificationId, contentId, topic, title, commentId) => {
     try {
       await axiosClient.get(`/contentcomment/readnotification/${notificationId}`);
       setNotifications(prev => prev.filter(n => n._id !== notificationId));
       window.location.href = `/content/${topic}/${contentId}?commentId=${commentId}`;
     } catch (err) {
-      if(isAuthenticated)
-       toast.error(err.response?.data || "Failed to mark notification as read");
+      if (isAuthenticated)
+        toast.error(err.response?.data || "Failed to mark notification as read");
     }
   };
 
@@ -61,10 +73,33 @@ function HomePage() {
 
   return (
     <div className="min-h-screen bg-base-300 mt-12">
-       <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500 rounded-full filter blur-3xl opacity-10"></div>
         <div className="absolute bottom-1/3 right-1/3 w-72 h-72 bg-cyan-500 rounded-full filter blur-3xl opacity-10"></div>
       </div>
+      
+      {/* Premium Status Badge - Golden Matte for Premium */}
+      {isAuthenticated && !loadingPremium && (
+        <div className="fixed top-20 right-4 z-50">
+          {isPremium ? (
+            <div className="badge gap-2 bg-amber-700 text-amber-100 border-amber-600 shadow-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Premium Member
+            </div>
+          ) : (
+            <Link to="/upgrade" className="badge gap-2 bg-gray-900 text-gray-100 border-gray-700 shadow-lg hover:bg-gray-800 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+              Upgrade Now
+            </Link>
+          )}
+        </div>
+      )}
+
+      {/* Rest of the notification code remains the same */}
       <div className="fixed top-30 right-4 z-50">
         <button 
           onClick={toggleNotifications}
@@ -125,7 +160,6 @@ function HomePage() {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-  
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold uppercase leading-tight">
               <span className="text-base-content">Master </span>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent">
@@ -164,6 +198,20 @@ function HomePage() {
               </span>
             </Link>
             
+            {!isPremium && isAuthenticated && !loadingPremium && (
+              <Link 
+                to="/upgrade" 
+                className="btn btn-lg group bg-gray-900 text-gray-100 border-gray-700 hover:bg-gray-800 hover:border-gray-600 shadow-lg transition-colors"
+              >
+                <span className="flex items-center gap-2">
+                  Upgrade to Premium
+                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                  </svg>
+                </span>
+              </Link>
+            )}
+            
             <motion.div
               animate={{ y: [0, 10, 0] }}
               transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
@@ -184,7 +232,7 @@ function HomePage() {
       </div>
 
       <div>
-        <BattlePromoSection />
+        <BattlePromoSection/>
       </div>
       
       <HomePageMarquee />

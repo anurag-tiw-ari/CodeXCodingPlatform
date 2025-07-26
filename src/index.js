@@ -21,6 +21,7 @@ import socketConnection from "./battles/socketConnection.js";
 import leaderBoardRouter from "./routes/weeklylb.js";
 import watchadsRouter from "./routes/watchads.js";
 import path from "path"
+import paymentRouter from "./routes/payment.js";
 
 
 const __dirname = path.resolve()
@@ -29,7 +30,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://codexcodingplatform.onrender.com",
+    origin: "https://codexcodingplatform.onrender.com",  //https://codexcodingplatform.onrender.com
     credentials: true,
   })
 );
@@ -46,11 +47,12 @@ app.use("/image", imageRouter);
 app.use("/contentcomment", contentCommentRouter);
 app.use("/leaderboard",leaderBoardRouter)
 app.use("/watch",watchadsRouter)
+app.use("/payment",paymentRouter)
 
 const server = http.createServer(app); 
 const io = new Server(server, {
   cors: {
-    origin: "https://codexcodingplatform.onrender.com",
+    origin: "https://codexcodingplatform.onrender.com",  //https://codexcodingplatform.onrender.com
     methods: ["GET", "POST"],
     credentials: true,
   },

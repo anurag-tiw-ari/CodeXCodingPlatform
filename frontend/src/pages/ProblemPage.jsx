@@ -11,6 +11,8 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { useNavigate,Link } from 'react-router';
 import { FiCopy } from 'react-icons/fi';
 import { toast } from 'react-toastify';
+import { FaSun,FaMoon } from 'react-icons/fa';
+import Editorial from '../Components/Editorial';
 
 
 const ProblemPage = () => {
@@ -35,6 +37,9 @@ const ProblemPage = () => {
   const [showEditor,setShowEditor] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [codeByLanguage, setCodeByLanguage] = useState({});
+  const [isPremium, setIsPremium] = useState(false);
+  const [editorTheme,setEditorTheme] = useState("vs-dark")
+
 
   const navigate = useNavigate();
 
@@ -72,6 +77,9 @@ const ProblemPage = () => {
         if (submissionsRes.data !== "No Submissions") {
           setSubmissions(submissionsRes.data);
         }
+
+        const premRes = await axiosClient.get("/user/premium");
+        setIsPremium(premRes.data.premium);
         
         setLoading(false);
       } catch (err) {
@@ -120,6 +128,8 @@ const handleRunCode = async () => {
 };
 
 //console.log("runResults:", runResults)
+
+console.log("problem:",problem)
 
 const handleSubmitCode = async () => {
     if (!codeByLanguage[language]) return;
@@ -177,6 +187,30 @@ const handleLike = async () =>{
     }
   };
 
+  const PremiumLockedMessage = () => (
+    <div className="flex flex-col items-center justify-center p-8 bg-base-300 rounded-lg text-center">
+      <div className="text-5xl mb-4">🔒</div>
+      <h3 className="text-xl font-bold mb-2">Premium Feature</h3>
+      <p className="mb-6">Upgrade to premium to access this content and unlock all features.</p>
+      <Link to="/upgrade" className="btn btn-primary">
+        Upgrade Now
+      </Link>
+    </div>
+  );
+
+  const EditorThemeHandler=()=>{
+ 
+    if(editorTheme==='vs-dark')
+    {
+      setEditorTheme("light");
+    }
+    else
+    {
+      setEditorTheme("vs-dark")
+    }
+
+  }
+
   if (loading) return (
     <div className="flex justify-center items-center h-screen bg-base-100">
       <span className="loading loading-spinner loading-lg text-primary"></span>
@@ -207,7 +241,7 @@ const handleLike = async () =>{
 
   return (
     <div className="flex flex-col h-screen bg-base-100 text-base-content overflow-hidden fixed z-25 inset-0">
-      {/* Mobile Header */}
+     
       {isMobileView && (
         <div className="flex items-center justify-between p-3 border-b border-base-300 bg-base-200">
           <div className="flex items-center space-x-2">
@@ -222,7 +256,7 @@ const handleLike = async () =>{
             <option value="Java">Java</option>
             <option value="JavaScript">JavaScript</option>
           </select>
-           <div className="flex">
+           <div className="flex gap-3">
                     <button
                       onClick={handleLike}
                       className={`text-[17px] ${isLiked ? "text-red-500" : "text-gray-400"} `}
@@ -233,13 +267,13 @@ const handleLike = async () =>{
         </div>
       )}
 
-      {/* Desktop Layout */}
+    
       {!isMobileView ? (
         <PanelGroup direction="horizontal" className="flex-1">
-          {/* Left Panel - Problem Description */}
+         
           <Panel defaultSize={40} minSize={20} collapsible={true}>
             <div className="h-full flex flex-col bg-base-200 border-r border-base-300">
-              {/* Tab Navigation */}
+        
               <div className="tabs tabs-boxed bg-base-200 px-2 pt-2">
                 <button
                   className={`tab ${activeTab === 'problem' ? 'tab-active' : ''}`}
@@ -273,7 +307,7 @@ const handleLike = async () =>{
                 </button>
               </div>
               
-              {/* Tab Content */}
+  
               <div className="flex-1 overflow-auto p-4">
                 {activeTab === 'problem' && (
                   <div>
@@ -320,37 +354,63 @@ const handleLike = async () =>{
                 )}
                 
                 {activeTab === 'editorial' && (
-                  <div className="prose prose-invert max-w-none">
+                <div className="prose prose-invert max-w-none">
+                  {isPremium ? (
+                    
+                     problem?.secureUrl ? (
+                    <Editorial secureURL={problem.secureUrl}/>
+                    ) : (
+                    <>
                     <h2 className="text-xl font-bold mb-4">Approach</h2>
-                    <p>Editorial content will go here...</p>
-                  </div>
-                )}
+                    <p>No Video Solution Available.</p>
+                    </>
+                    )
+
+                     
+                    
+                  ) : (
+                    <PremiumLockedMessage />
+                  )}
+                </div>
+      )}
                 
-                {activeTab === 'solutions' && (
-                  <div>
-                    <h2 className="text-xl font-bold mb-4">Reference Solutions</h2>
-                    {problem.referenceSolution.map((solution, index) => (
-                      <div key={index} className="mb-6 relative">
-                        <div className="flex items-center justify-between mb-3">
-                          <h3 className="font-semibold">{solution.language}</h3>
-                        </div>
-                        <div className="bg-base-300 p-4 rounded-lg border border-base-content/10">
-                          <pre className="text-sm font-mono whitespace-pre-wrap overflow-x-auto">
-                            {solution.completeCode}
-                          </pre>
-                          <div className='absolute bottom-2 right-2 '><FiCopy onClick={()=>{copyToClipboard(solution.completeCode)}} /></div>
-                        </div>
-                      </div>
-                    ))}
+                 {activeTab === 'solutions' && (
+        <div>
+          <h2 className="text-xl font-bold mb-4">Reference Solutions</h2>
+          {isPremium ? (
+            problem.referenceSolution.map((solution, index) => (
+              <div key={index} className="mb-6 relative">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-semibold">{solution.language}</h3>
+                </div>
+                <div className="bg-base-300 p-4 rounded-lg border border-base-content/10">
+                  <pre className="text-sm font-mono whitespace-pre-wrap overflow-x-auto">
+                    {solution.completeCode}
+                  </pre>
+                  <div className='absolute bottom-2 right-2 '>
+                    <FiCopy onClick={()=>{copyToClipboard(solution.completeCode)}} />
                   </div>
-                )}
+                </div>
+              </div>
+            ))
+          ) : (
+            <PremiumLockedMessage />
+          )}
+        </div>
+      )}
 
                  
                   <div className="prose prose-invert max-w-none" style={{ display: activeTab === 'AskAI' ? 'block' : 'none' }}>
-                    <h2 className="text-xl font-bold mb-2 text-center">AI Helper</h2>
-                    <p>Ask Your Query...</p>
-                    <ChatAI problem={problem} />
-                  </div>
+          {isPremium ? (
+            <>
+              <h2 className="text-xl font-bold mb-2 text-center">AI Helper</h2>
+              <p>Ask Your Query...</p>
+              <ChatAI problem={problem} />
+            </>
+          ) : (
+            <PremiumLockedMessage />
+          )}
+        </div>
                 
                 
                 {activeTab === 'submissions' && (
@@ -436,7 +496,10 @@ const handleLike = async () =>{
                     <option value="Java">Java</option>
                     <option value="JavaScript">JavaScript</option>
                   </select>
-                  <div className="flex space-x-1">
+                  <div className="flex space-x-2">
+                    <button className='rounded-full' onClick={EditorThemeHandler}>
+                      {editorTheme==="vs-dark" ? <FaMoon />:<FaSun /> }
+                    </button>
                     <button
                       onClick={handleLike}
                       className={`text-md ${isLiked ? "text-red-500" : "text-gray-400"} `}
@@ -455,7 +518,7 @@ const handleLike = async () =>{
                   <Editor
                     height="100%"
                     language={languageToMonacoId[language] || 'javascript'}
-                    theme="vs-dark"
+                    theme={editorTheme}
                      value={codeByLanguage[language] || ''}
                     onChange={(value) => {
                       setCodeByLanguage(prev => ({
@@ -663,43 +726,55 @@ const handleLike = async () =>{
         </div>
       )}
       
-      {activeTab === 'editorial' && (
-        <div className="prose prose-sm max-w-none">
-          <h2 className="text-lg font-bold mb-3">Approach</h2>
-          <p>Editorial content will go here...</p>
-        </div>
-      )}
-      
-      {activeTab === 'solutions' && (
-        <div>
-          <h2 className="text-lg font-bold mb-3">Reference Solutions</h2>
-          <div className="space-y-3">
-            {problem.referenceSolution.map((solution, index) => (
-              <div key={index} className="collapse collapse-arrow bg-base-300">
-                <input type="checkbox" />
-                <div className="collapse-title text-sm font-medium">
-                  {solution.language} Solution
+                    {activeTab === 'editorial' && (
+                <div className="prose prose-invert max-w-none">
+                  {isPremium ? (
+                    <>
+                      <h2 className="text-xl font-bold mb-4">Approach</h2>
+                      <p>No Video Solution Availble.</p>
+                    </>
+                  ) : (
+                    <PremiumLockedMessage />
+                  )}
                 </div>
-                <div className="collapse-content relative">
-                  <pre className="text-xs font-mono whitespace-pre-wrap overflow-x-auto bg-base-100 p-2 rounded">
+      )}
+                
+                 {activeTab === 'solutions' && (
+        <div>
+          <h2 className="text-xl font-bold mb-4">Reference Solutions</h2>
+          {isPremium ? (
+            problem.referenceSolution.map((solution, index) => (
+              <div key={index} className="mb-6 relative">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-semibold">{solution.language}</h3>
+                </div>
+                <div className="bg-base-300 p-4 rounded-lg border border-base-content/10">
+                  <pre className="text-sm font-mono whitespace-pre-wrap overflow-x-auto">
                     {solution.completeCode}
                   </pre>
-
-                  <div className='absolute bottom-5 right-5 '><FiCopy onClick={()=>{copyToClipboard(solution.completeCode)}} /></div>
+                  <div className='absolute bottom-2 right-2 '>
+                    <FiCopy onClick={()=>{copyToClipboard(solution.completeCode)}} />
+                  </div>
                 </div>
-        
               </div>
-            ))}
-          </div>
+            ))
+          ) : (
+            <PremiumLockedMessage />
+          )}
         </div>
       )}
 
-     
-        <div className="h-full flex flex-col" style={{ display: activeTab === 'AskAI' ? 'block' : 'none' }}>
-          <h2 className="text-lg font-bold mb-2 text-center">AI Helper</h2>
-          <div className="flex-1">
-            <ChatAI mobileView={true} problem={problem}/>
-          </div>
+                 
+                  <div className="prose prose-invert max-w-none" style={{ display: activeTab === 'AskAI' ? 'block' : 'none' }}>
+          {isPremium ? (
+            <>
+              <h2 className="text-xl font-bold mb-2 text-center">AI Helper</h2>
+              <p>Ask Your Query...</p>
+              <ChatAI problem={problem} />
+            </>
+          ) : (
+            <PremiumLockedMessage />
+          )}
         </div>
       
       
@@ -790,7 +865,14 @@ const handleLike = async () =>{
             <div className='text-md flex space-x-1 text-gray-400'>
                     <FiCopy onClick={()=>{copyToClipboard(codeByLanguage[language] )}} />
                     </div>
+
+                    <div>
+            <button className='rounded-full' onClick={EditorThemeHandler}>
+                      {editorTheme==="vs-dark" ? <FaMoon />:<FaSun /> }
+                    </button>
           </div>
+          </div>
+
         </div>
 
         {/* Editor Content */}
@@ -798,7 +880,7 @@ const handleLike = async () =>{
           <Editor
             height="100%"
             language={languageToMonacoId[language] || 'javascript'}
-            theme="vs-dark"
+            theme={editorTheme}
             value={codeByLanguage[language] || ''}
             onChange={(value) => {
             setCodeByLanguage(prev => ({  
@@ -1033,7 +1115,6 @@ const handleLike = async () =>{
           </div>
         </div>
       )}
-      {/* View Submitted Code Modal */}
     {viewingSubmissionCode && (
         <div className="modal modal-open">
             <div className="modal-box max-w-5xl bg-base-200 h-5/6 flex flex-col">

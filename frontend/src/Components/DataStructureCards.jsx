@@ -78,7 +78,7 @@ function DataStructureCards() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h1 className="text-5xl sm:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-200 to-gray-400 mb-4">
+          <h1 className="text-5xl sm:text-6xl font-bold bg-clip-text  bg-gradient-to-r from-gray-200 to-gray-400 mb-4">
             Learn And Visulaize
           </h1>
         </motion.div>
@@ -96,7 +96,7 @@ function DataStructureCards() {
               variants={item}
               className="relative group"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-neutral-800 to-neutral-900 rounded-xl opacity-70 group-hover:opacity-100 transition-opacity"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-950 to-neutral-900 rounded-xl opacity-90 group-hover:opacity-100 transition-opacity"></div>
               <div className="relative rounded-xl border border-neutral-800 overflow-hidden transition-all duration-300 group-hover:border-neutral-700 group-hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)]">
                 <div className="p-6">
                   <div className="flex items-center mb-5">

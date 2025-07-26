@@ -105,6 +105,10 @@ const userSchema=new Schema({
                 unique: true
             }
         
+    },
+    premium:{
+        type:Boolean,
+        default:false
     }
 
 },{

@@ -2,7 +2,7 @@
 import cron from 'node-cron';
 import Problem from './models/problem.js'; 
 
-cron.schedule('39 17 * * *', async () => {
+cron.schedule('0 0 * * *', async () => {
   
     const today = new Date();
     const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());

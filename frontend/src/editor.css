@@ -47,11 +47,11 @@
 }
 
 .editor pre {
-  background-color: #8a2be2;
+  background-color: #892be21e;
   color: #f8f8f2;
   margin: 15px 0;
   padding: 15px;
-  border: 2px solid #9c27b0;
+  /* border: 2px solid #9c27b0; */
   border-radius: 15px;
   font-family: 'Fira Code', 'Consolas', monospace;
   font-size: 15px;

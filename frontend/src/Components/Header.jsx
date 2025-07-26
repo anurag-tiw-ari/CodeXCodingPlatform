@@ -37,7 +37,7 @@ function Header() {
 
     return (
         <header className="navbar bg-base-100/90 shadow-lg fixed top-0 px-4 sm:px-8 z-15 backdrop-blur-md border-b border-base-200">
-            {/* Left side - Logo */}
+            
             <div className="flex-1">
                 <NavLink 
                     to="/" 
@@ -48,6 +48,9 @@ function Header() {
             </div>
             
             <div className="hidden md:flex gap-3 px-4">
+                <Link to="/themes" className="btn btn-ghost btn-md font-medium hover:text-primary transition-colors"
+                    activeClassName="text-secondary font-semibold">
+                Themes</Link>
                 <a 
                     href="#learnDSA"
                     className="btn btn-ghost btn-md font-medium hover:text-primary transition-colors"
@@ -78,7 +81,7 @@ function Header() {
                 </Link>
             </div>
             
-            {/* Right side - User controls */}
+        
             <div className="flex-none gap-2 sm:gap-4 items-center ">
                 {isAuthenticated && user?.role === 'admin' && (
                     <NavLink 
@@ -88,8 +91,7 @@ function Header() {
                         Admin DashBoard
                     </NavLink>
                 )}
-                
-                {/* Mobile menu button */}
+             
                 <div className="dropdown dropdown-end md:hidden">
                     <label tabIndex={0} className="btn btn-ghost btn-circle">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -97,7 +99,10 @@ function Header() {
                         </svg>
                     </label>
                     <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 border border-base-200">
-                         <li><a href="#learnDSA" onClick={()=>navigate("/?pageId=learnDSA")}>
+                         <li>
+                            <Link to="/themes">
+                Themes</Link>
+                            <a href="#learnDSA" onClick={()=>navigate("/?pageId=learnDSA")}>
                             Learn DSA
                         </a></li>
                         <li><a 
@@ -115,7 +120,7 @@ function Header() {
                     </ul>
                 </div>
                 
-                {/* User avatar dropdown */}
+              
                 <div className="dropdown dropdown-end">
                     <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                         <div className="w-8 rounded-full">
@@ -167,7 +172,6 @@ function Header() {
                 </div>
             </div>
             
-            {/* Logout confirmation modal */}
               {   isAuthenticated ? <>
                         <input type="checkbox" id="my_modal_6" className="modal-toggle" />
                         <div className="modal top-0 left-0 fixed justify-center items-center h-screen w-screen" role="dialog">

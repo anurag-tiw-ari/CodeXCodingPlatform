@@ -6,7 +6,7 @@
 
 import express from "express";
 import adminMiddleware from "../middleware/adminMiddleware.js";
-import {createProblem,updateProblem,deleteProblem,getProblemById,getAllProblems,solvedProblemsByUser,submittedProblem,likedProblems,checkLike, getLikedProblemsByUser, problemsCreatedByAdmin,solvedProblemsByAnotherUser,getPOTD} from "../controllers/userProblem.js";
+import {createProblem,updateProblem,deleteProblem,getProblemById,getAllProblems,solvedProblemsByUser,submittedProblem,likedProblems,checkLike, getLikedProblemsByUser, problemsCreatedByAdmin,solvedProblemsByAnotherUser,getPOTD,searchProblem} from "../controllers/userProblem.js";
 import userMidddleware from "../middleware/userMiddleware.js";
 
 const problemRouter = express.Router();
@@ -52,5 +52,7 @@ problemRouter.get("/problemCreatedByAdmin",adminMiddleware, problemsCreatedByAdm
 problemRouter.get("/solvedProblemsByAnotherUser/:id",userMidddleware,solvedProblemsByAnotherUser)
 
 problemRouter.get("/potd",userMidddleware,getPOTD)
+
+problemRouter.get("/search/problem",userMidddleware,searchProblem)
 
 export default problemRouter

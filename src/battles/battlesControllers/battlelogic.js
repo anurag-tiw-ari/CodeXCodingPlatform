@@ -132,6 +132,7 @@ const onTabChange = async (socket,io,{status},ongoingBattles) => {
         {
         const battle = ongoingBattles.get(activeBattleId);
         const otherSocketId = battle.player1.socketId === socket.id ? battle.player2.socketId : battle.player1.socketId;
+        io.to(otherSocketId).emit('opponentLeft', { message: 'Your opponent left, you win!' });
         await endBattle(activeBattleId, otherSocketId,io,ongoingBattles); 
       }
     }, 10000); 
