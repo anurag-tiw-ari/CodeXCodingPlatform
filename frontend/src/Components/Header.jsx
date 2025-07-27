@@ -2,28 +2,26 @@ import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../authSlice.js";
 import { useNavigate } from "react-router";
 import { Link, NavLink } from "react-router";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import axiosClient from "../utils/axiosClient.js";
 
 function Header() {
     const { user, isAuthenticated } = useSelector((state) => state.auth);
-    const [profilepic,setProfilePic] = useState(null)
+    const [profilepic, setProfilePic] = useState(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     
-      useEffect(() => {
+    useEffect(() => {
         const fetchPP = async () => {
-          try {
-            const resp = await axiosClient.get('/user/profilepic');
-          //  console.log("header res:", resp)
-            setProfilePic(resp.data.profilePic.secureURL);
-          } catch (err) {
-            console.log(err?.response?.data);
-          }
+            try {
+                const resp = await axiosClient.get('/user/profilepic');
+                setProfilePic(resp.data.profilePic.secureURL);
+            } catch (err) {
+                console.log(err?.response?.data);
+            }
         };
-        if(user)
-        fetchPP();
-      }, [user]);
+        if (user) fetchPP();
+    }, [user]);
 
     const handleLogOut = () => {
         if (isAuthenticated) dispatch(logoutUser());
@@ -43,18 +41,19 @@ function Header() {
                     to="/" 
                     className="btn btn-ghost text-md sm:text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent hover:bg-gradient-to-l transition-all duration-300"
                 >
-                  Coding Platform
+                    Coding Platform
                 </NavLink>
             </div>
             
             <div className="hidden md:flex gap-3 px-4">
                 <Link to="/themes" className="btn btn-ghost btn-md font-medium hover:text-primary transition-colors"
                     activeClassName="text-secondary font-semibold">
-                Themes</Link>
+                    Themes
+                </Link>
                 <a 
                     href="#learnDSA"
                     className="btn btn-ghost btn-md font-medium hover:text-primary transition-colors"
-                    onClick={()=>navigate("/?pageId=learnDSA")}
+                    onClick={() => navigate("/?pageId=learnDSA")}
                 >
                     Learn DSA
                 </a>
@@ -62,7 +61,7 @@ function Header() {
                     href="#battle" 
                     className="btn btn-ghost btn-md font-medium hover:text-secondary transition-colors"
                     activeClassName="text-secondary font-semibold"
-                    onClick={()=>navigate("/?pageId=battle")}
+                    onClick={() => navigate("/?pageId=battle")}
                 >
                     <span className="relative">
                         Code Battle
@@ -81,8 +80,10 @@ function Header() {
                 </Link>
             </div>
             
-        
-            <div className="flex-none gap-2 sm:gap-4 items-center ">
+            <div className="flex-none gap-2 sm:gap-4 items-center">
+                
+                
+              <div className="flex gap-2 items-center">
                 {isAuthenticated && user?.role === 'admin' && (
                     <NavLink 
                         to="/admin" 
@@ -91,7 +92,6 @@ function Header() {
                         Admin DashBoard
                     </NavLink>
                 )}
-             
                 <div className="dropdown dropdown-end md:hidden">
                     <label tabIndex={0} className="btn btn-ghost btn-circle">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -99,29 +99,27 @@ function Header() {
                         </svg>
                     </label>
                     <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 border border-base-200">
-                         <li>
-                            <Link to="/themes">
-                Themes</Link>
-                            <a href="#learnDSA" onClick={()=>navigate("/?pageId=learnDSA")}>
-                            Learn DSA
-                        </a></li>
-                        <li><a 
-                    href="#battle" 
-                    onClick={()=>navigate("/?pageId=battle")}
-                >
-                    <span className="relative">
-                        Code Battle
-                       </span>
-                </a></li>
-                        <li><Link to="/battle/weeklyleaderboard" >Weekly LeaderBoard</Link></li>
+                        <li>
+                            <Link to="/themes">Themes</Link>
+                            <a href="#learnDSA" onClick={() => navigate("/?pageId=learnDSA")}>
+                                Learn DSA
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#battle" onClick={() => navigate("/?pageId=battle")}>
+                                <span className="relative">Code Battle</span>
+                            </a>
+                        </li>
+                        <li>
+                            <Link to="/battle/weeklyleaderboard">Weekly LeaderBoard</Link>
+                        </li>
                         {isAuthenticated && user?.role === 'admin' && (
                             <li><NavLink to="/admin">Admin Dashboard</NavLink></li>
                         )}
                     </ul>
                 </div>
-                
-              
-                <div className="dropdown dropdown-end">
+                <div className="flex gap-1 items-center">
+                    <div className="dropdown dropdown-end">
                     <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                         <div className="w-8 rounded-full">
                             <img
@@ -130,6 +128,7 @@ function Header() {
                             />
                         </div>
                     </label>
+
                     
                     <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52 border border-base-200">
                         {isAuthenticated ? (
@@ -170,20 +169,44 @@ function Header() {
                         )}
                     </ul>
                 </div>
+                 {!isAuthenticated && (
+                    <div className="hidden md:flex gap-2">
+                        <NavLink 
+                            to="/login" 
+                            className="btn btn-sm btn-outline btn-primary"
+                        >
+                            Login
+                        </NavLink>
+                        <NavLink 
+                            to="/signup" 
+                            className="btn btn-sm btn-primary"
+                        >
+                            Sign Up
+                        </NavLink>
+                    </div>
+                )}
+                </div>
+              </div>
+               
+                
+            
+                
             </div>
             
-              {   isAuthenticated ? <>
-                        <input type="checkbox" id="my_modal_6" className="modal-toggle" />
-                        <div className="modal top-0 left-0 fixed justify-center items-center h-screen w-screen" role="dialog">
+            {isAuthenticated ? (
+                <>
+                    <input type="checkbox" id="my_modal_6" className="modal-toggle" />
+                    <div className="modal top-0 left-0 fixed justify-center items-center h-screen w-screen" role="dialog">
                         <div className="modal-box">
                             <p className="py-2 text-2xl text-center leading-0.8">Are You Sure You Want To Logout?</p>
                             <div className="modal-action flex justify-evenly">
                                 <label htmlFor="my_modal_6" className="btn btn-primary">NO</label>
-                            <label onClick={handleLogOut} className="btn btn-md btn-error">Log Out</label>
+                                <label onClick={handleLogOut} className="btn btn-md btn-error">Log Out</label>
                             </div>
                         </div>
-                        </div> </>: null
-                    }
+                    </div>
+                </>
+            ) : null}
         </header>
     );
 }
