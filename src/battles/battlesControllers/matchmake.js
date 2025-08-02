@@ -9,7 +9,7 @@ async function matchmake(socket, difficulty, topics, ongoingBattles, waitingPlay
     let problem = null;
     let commonTopics = [];
 
-    // Loop through all waiting players instead of using .find()
+
     for (const p of waitingPlayers.list) {
         if (
             p.difficulty === difficulty &&
@@ -29,7 +29,7 @@ async function matchmake(socket, difficulty, topics, ongoingBattles, waitingPlay
                 existing = p;
                 problem = candidateProblem;
                 commonTopics = overlap;
-                break; // stop after finding a valid match
+                break;
             }
         }
     }
@@ -84,7 +84,7 @@ async function matchmake(socket, difficulty, topics, ongoingBattles, waitingPlay
 
         console.log("waitingList2:", waitingPlayers.list);
     } else {
-        // No valid match found, add this player to the waiting list
+       
         waitingPlayers.list.push({ socket, difficulty, topics, joinTime: Date.now() });
 
         console.log("waitingList3:", waitingPlayers.list);
