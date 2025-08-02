@@ -1,104 +1,110 @@
 import { pickRandomProblem } from "./elgibleProblems.js";
 import User from "../../models/user.js";
 
-async function matchmake(socket, difficulty, topics,ongoingBattles,waitingPlayers,entryFee) {
+async function matchmake(socket, difficulty, topics, ongoingBattles, waitingPlayers, entryFee) {
    
-    console.log("waitingList1:", waitingPlayers.list)
-  
-    const existing = waitingPlayers.list.find(
-    (p) =>
-      p.difficulty === difficulty &&
-      p.topics.some((t) => topics.includes(t)) && p.socket?.user?._id?.toString() !== socket.user?._id?.toString()
+    console.log("waitingList1:", waitingPlayers.list);
 
-  );
+    let existing = null;
+    let problem = null;
+    let commonTopics = [];
 
-  if (existing) {
-   
-    const commonTopics = existing.topics.filter((t) => topics.includes(t));
-    if (commonTopics.length === 0) return; 
-    const battleId = `battle-${Date.now()}`;
+    // Loop through all waiting players instead of using .find()
+    for (const p of waitingPlayers.list) {
+        if (
+            p.difficulty === difficulty &&
+            p.socket?.user?._id?.toString() !== socket.user?._id?.toString()
+        ) {
+            const overlap = p.topics.filter((t) => topics.includes(t));
+            if (overlap.length === 0) continue;
 
-    
-    const problem = await pickRandomProblem(difficulty, commonTopics,existing.socket.user._id,socket.user._id);
+            const candidateProblem = await pickRandomProblem(
+                difficulty,
+                overlap,
+                p.socket.user._id,
+                socket.user._id
+            );
 
-    if(!problem)
-    {
-        waitingPlayers.list.push({ socket, difficulty, topics, joinTime: Date.now() });
-        return;
+            if (candidateProblem) {
+                existing = p;
+                problem = candidateProblem;
+                commonTopics = overlap;
+                break; // stop after finding a valid match
+            }
+        }
     }
 
-    console.log("problem:", problem)
+    if (existing) {
+        const battleId = `battle-${Date.now()}`;
 
-    ongoingBattles.set(battleId, {
-      player1: {
-        userId: existing.socket.user._id,
-        socketId: existing.socket.id,
-      },
-      player2: {
-        userId: socket.user._id,
-        socketId: socket.id,
-      },
-      difficulty,
-      commonTopics,
-      problem,
-      createdAt: new Date(),
-    });
+        console.log("problem:", problem);
 
-     const user1 = await User.findById(socket.user._id)
-     const user2 = await User.findById(existing.socket.user._id)
+        ongoingBattles.set(battleId, {
+            player1: {
+                userId: existing.socket.user._id,
+                socketId: existing.socket.id,
+            },
+            player2: {
+                userId: socket.user._id,
+                socketId: socket.id,
+            },
+            difficulty,
+            commonTopics,
+            problem,
+            createdAt: new Date(),
+        });
 
-    socket.emit('battleStart', {
-      battleId,
-      problem,
-      commonTopics,
-      difficulty,
-      user1,
-      user2
-    });
+        const user1 = await User.findById(socket.user._id);
+        const user2 = await User.findById(existing.socket.user._id);
 
-    existing.socket.emit('battleStart', {
-      battleId,
-      problem,
-      commonTopics,
-      difficulty,
-      user1,
-      user2
-    });
+        socket.emit('battleStart', {
+            battleId,
+            problem,
+            commonTopics,
+            difficulty,
+            user1,
+            user2
+        });
 
-    await User.findByIdAndUpdate(socket.user._id, { $inc: { coins: -entryFee } });
-    await User.findByIdAndUpdate(existing.socket.user._id, { $inc: { coins: -entryFee } });
+        existing.socket.emit('battleStart', {
+            battleId,
+            problem,
+            commonTopics,
+            difficulty,
+            user1,
+            user2
+        });
 
+        await User.findByIdAndUpdate(socket.user._id, { $inc: { coins: -entryFee } });
+        await User.findByIdAndUpdate(existing.socket.user._id, { $inc: { coins: -entryFee } });
 
-    waitingPlayers.list = waitingPlayers.list.filter(
-      (p) => p.socket.id !== existing.socket.id
-    );
-
-    console.log("waitingList2:", waitingPlayers.list)
-  } 
-  
-  else 
-  
-  {
-    waitingPlayers.list.push({ socket, difficulty, topics, joinTime: Date.now() });
-
-    console.log("waitingList3:", waitingPlayers.list)
-
-    setTimeout(() => {
-      const stillWaiting = waitingPlayers.list.find((p) => p.socket.id === socket.id);
-      if (stillWaiting) {
         waitingPlayers.list = waitingPlayers.list.filter(
-          (p) => p.socket.id !== socket.id
+            (p) => p.socket.id !== existing.socket.id
         );
 
-        console.log("waitingList4:", waitingPlayers.list)
+        console.log("waitingList2:", waitingPlayers.list);
+    } else {
+        // No valid match found, add this player to the waiting list
+        waitingPlayers.list.push({ socket, difficulty, topics, joinTime: Date.now() });
 
-        socket.emit('noPlayersFound', {
-          message: 'No opponent found. Please try again or change your criteria.',
-        });
-      }
-    }, 20000); 
-  }
+        console.log("waitingList3:", waitingPlayers.list);
+
+        setTimeout(() => {
+            const stillWaiting = waitingPlayers.list.find((p) => p.socket.id === socket.id);
+            if (stillWaiting) {
+                waitingPlayers.list = waitingPlayers.list.filter(
+                    (p) => p.socket.id !== socket.id
+                );
+
+                console.log("waitingList4:", waitingPlayers.list);
+
+                socket.emit('noPlayersFound', {
+                    message: 'No opponent found. Please try again or change your criteria.',
+                });
+            }
+        }, 20000);
+    }
 }
 
-
 export default matchmake;
+
