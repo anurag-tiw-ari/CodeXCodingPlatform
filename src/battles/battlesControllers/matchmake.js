@@ -8,7 +8,8 @@ async function matchmake(socket, difficulty, topics,ongoingBattles,waitingPlayer
     const existing = waitingPlayers.list.find(
     (p) =>
       p.difficulty === difficulty &&
-      p.topics.some((t) => topics.includes(t)) 
+      p.topics.some((t) => topics.includes(t)) && p.socket?.user?._id?.toString() !== socket.user?._id?.toString()
+
   );
 
   if (existing) {
@@ -19,6 +20,12 @@ async function matchmake(socket, difficulty, topics,ongoingBattles,waitingPlayer
 
     
     const problem = await pickRandomProblem(difficulty, commonTopics,existing.socket.user._id,socket.user._id);
+
+    if(!problem)
+    {
+        waitingPlayers.list.push({ socket, difficulty, topics, joinTime: Date.now() });
+        return;
+    }
 
     console.log("problem:", problem)
 
