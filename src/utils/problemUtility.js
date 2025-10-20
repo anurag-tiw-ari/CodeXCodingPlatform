@@ -20,7 +20,7 @@ const submitBatch=async (submissions)=>{
         base64_encoded: 'true'
       },
       headers: {
-        'x-rapidapi-key':'b7055c95acmsh34946e84e4e6f61p1448adjsn7ebce46cd253',  //0e972bd187msh4119df5449d3af5p1c8f6cjsnec753a0a4e2a
+        'x-rapidapi-key':'0e972bd187msh4119df5449d3af5p1c8f6cjsnec753a0a4e2a',  //0e972bd187msh4119df5449d3af5p1c8f6cjsnec753a0a4e2a
         'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
         'Content-Type': 'application/json'
       },
@@ -71,7 +71,7 @@ const submitToken=async (tokenStr)=>{
         fields: '*'
     },
     headers: {
-        'x-rapidapi-key': 'b7055c95acmsh34946e84e4e6f61p1448adjsn7ebce46cd253',
+        'x-rapidapi-key': '0e972bd187msh4119df5449d3af5p1c8f6cjsnec753a0a4e2a',
         'x-rapidapi-host': 'judge0-ce.p.rapidapi.com'
       }
     };
